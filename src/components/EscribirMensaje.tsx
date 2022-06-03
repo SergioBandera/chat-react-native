@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -6,19 +6,32 @@ import {
   TextInputChangeEventData,
 } from "react-native";
 import { IconButton } from "react-native-paper";
+import useContextMensaje, { IMensaje } from "../context/useMensajes";
 
-export interface IMensaje {
-  mensaje: string;
-  foto: string;
-}
+
 export const EscribirMensaje = () => {
-  const [mensaje, setMensaje] = useState<string>();
+  const [mensaje, setMensaje] = useState<string>("");
+  const {setMensajes, mensajes} = useContext(useContextMensaje)
 
   const cogerMensaje = (
     event: NativeSyntheticEvent<TextInputChangeEventData>
   ) => setMensaje(event.nativeEvent.text);
 
+  
+  
+  const guardarMensaje = () =>{
+    if (mensajes)
+    setMensajes([...mensajes, mensaje])
+    else setMensajes([mensaje])
+    setMensaje("")
+  }
+  
+  // useEffect(() => {
+  //   console.log(mensaje)
+  //   setMensaje("")
 
+  // }, [mensajes])
+  
 
   return (
     <View
@@ -38,6 +51,7 @@ export const EscribirMensaje = () => {
           flexDirection: "column",
           flexWrap: "nowrap",
         }}
+        value={mensaje}
         maxLength={300}
         onChange={cogerMensaje}
         placeholder="Escribe algo..."
@@ -58,7 +72,7 @@ export const EscribirMensaje = () => {
           }}
           icon="send"
           color="white"
-          onPress={() => console.log(mensaje)}
+          onPress={guardarMensaje}
         />
       </View>
     </View>

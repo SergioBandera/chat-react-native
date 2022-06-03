@@ -1,11 +1,13 @@
-import react from "react";
+import react, { useState } from "react";
 import Constants from "expo-constants";
 import { Text, View } from "react-native";
 import Conversacion from "./Conversacion";
 import { EscribirMensaje } from "./EscribirMensaje";
+import useContextMensaje, { IMensaje } from "../context/useMensajes";
 
 export const Main = () => {
-  const mensaje1: string = "esta sera la conversacion";
+  const [mensajes, setMensajes] = useState<Array<IMensaje>>();
+
   return (
     <View style={{ marginTop: Constants.statusBarHeight, flexGrow: 1 }}>
       <Text
@@ -22,10 +24,13 @@ export const Main = () => {
       >
         Chat con React Native
       </Text>
-        
-      <Conversacion mensaje={mensaje1} />
+      <useContextMensaje.Provider value={ {mensajes , setMensajes} } >
+
+      <Conversacion />
 
       <EscribirMensaje />
+
+      </useContextMensaje.Provider>
     </View>
   );
 };
