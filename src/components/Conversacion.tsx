@@ -1,38 +1,53 @@
-import React, { useContext, useState } from "react";
-import { View, Text } from "react-native";
-import useContextMensaje, { IMensaje } from "../context/useMensajes";
+import React, { useContext } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { useContextMensaje, IMensaje } from "../context/useMensajes";
 
 const Conversacion: React.FC = () => {
-  //  const [mensaje, setMensaje] = useState<IMensaje>()
 
-  const { mensajes } = useContext(useContextMensaje);
 
-const mostrarMensajes =() =>{
-    if ( mensajes !== undefined)
-    return mensajes.map((mensaje:string, index:number) => (
-        <View key={index}>
-            <Text>{mensaje}</Text>
-        </View>
-    ));
+  const mensajes = useContext(useContextMensaje);
 
-}
-  return (
-    <View
-      style={{
-        height: "70%",
-        backgroundColor: "#C544",
-      }}
-    >
-      <Text
-        style={{
-          backgroundColor: "aqua",
-        }}
-      >
-      </Text>
-      <View>
-      {mostrarMensajes()}
-      </View>
-    </View>
-  );
+  const mostrarMensajes = () => {
+    if (mensajes?.mensajes !== null)
+      return mensajes!.mensajes!.map(
+        ({ texto, foto }: IMensaje, index: number) => (
+          <View key={index} style={ styles.container }>
+            {foto === "" ? (
+              <Text
+                style={styles.textoMapa}
+              >
+                {texto}
+              </Text>
+            ) : (
+              <Image style={styles.imagenMap} source={{ uri: foto }}></Image>
+            )}
+          </View>
+        )
+      );
+  };
+  return <View style={styles.container}>{mostrarMensajes()}</View>;
 };
 export default Conversacion;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  imagenMap: {
+    width: 300,
+    height: 300,
+    margin: 5,
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  textoMapa:{
+    backgroundColor: "#b4db95",
+    padding: 5,
+    margin: 5,
+    flex: 1,
+    borderColor: "#ced0ce",
+    borderWidth: 1,
+    borderRadius: 15,
+    marginLeft: 5,
+  }
+});
